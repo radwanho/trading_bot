@@ -1,0 +1,6 @@
+python-binance
+websocket_client
+flask
+XlsxWriter
+waitress
+schedule            #https://github.com/dbader/schedule

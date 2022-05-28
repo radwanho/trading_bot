@@ -1,0 +1,11 @@
+venv/
+__pycache__/
+webapp/
+me_readme.txt
+*.csv
+*.xlsx
+app_demo.py
+demo_binance.ipynb
+demo_gate.ipynb
+gateETFbot.py
+gateSniper.py
