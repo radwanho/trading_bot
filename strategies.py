@@ -13,7 +13,7 @@ class TradingBot(ABC):
         self.symbol = conf["symbol"]
         self.coin = conf["coin"]
         self.frame = conf["frame"]
-        self.conf = conf["strategie"]
+        self.arg_strategie = conf["strategie"]
         self.count = 1
         self.trades = []
 
@@ -92,10 +92,10 @@ class MultiTrader(TradingBot):
 
     def __init__(self, exchange: Exchange, log: Logger, setting):
         TradingBot.__init__(self, exchange, log, setting)
-        self.balance = float(self.conf["balance"])
-        self.TRADE_TOTAL_PRICE = float(self.conf["each_buy_price"])
-        self.PERCENTAGE_BUY = float(self.conf["next_buy"])  #0.992 >> 0.008 = $5
-        self.PERCENTAGE_SELL = float(self.conf["sell_at"]) #0.992 >> 0.008 = $0.80
+        self.balance = float(self.arg_strategie["balance"])
+        self.TRADE_TOTAL_PRICE = float(self.arg_strategie["each_buy_price"])
+        self.PERCENTAGE_BUY = float(self.arg_strategie["next_buy"])  #0.992 >> 0.008 = $5
+        self.PERCENTAGE_SELL = float(self.arg_strategie["sell_at"]) #0.992 >> 0.008 = $0.80
 
     def should_buy(self, close) -> bool:
         if self.balance < self.TRADE_TOTAL_PRICE:
@@ -123,7 +123,7 @@ class MultiTrader(TradingBot):
         candle = self.exchange.get_current_candle(data)
         close = float(candle['c'])
 
-        trade_qty = round(self.TRADE_TOTAL_PRICE / close, self.conf["precision"])
+        trade_qty = round(self.TRADE_TOTAL_PRICE / close, self.arg_strategie["precision"])
 
         make_order = False
 
@@ -132,7 +132,7 @@ class MultiTrader(TradingBot):
             make_order = True
 
         elif self.should_sell(close):
-            qty = self.string_to_float(self.trades[-1]["q_net"], self.conf["precision"])
+            qty = self.string_to_float(self.trades[-1]["q_net"], self.arg_strategie["precision"])
             resp_order = self.sell(close, qty)
             make_order = True
 
@@ -142,14 +142,14 @@ class MultiTrader(TradingBot):
                 self.update_info(order, close, self.balance)
                 if self.exchange.order_side(order) == "BUY":
                     self.balance -= self.trades[-1]["p"]
-                    if self.conf["allow_increase"]:
-                        self.PERCENTAGE_BUY -= float(self.conf["increase_percenttage_by"])
-                        self.PERCENTAGE_SELL -= float(self.conf["increase_percenttage_by"])
+                    if self.arg_strategie["allow_increase"]:
+                        self.PERCENTAGE_BUY -= float(self.arg_strategie["increase_percenttage_by"])
+                        self.PERCENTAGE_SELL -= float(self.arg_strategie["increase_percenttage_by"])
                 else:
                     self.balance += self.exchange.cal_net_price_of_order(order)
-                    if self.conf["allow_increase"]:
-                        self.PERCENTAGE_BUY += float(self.conf["increase_percenttage_by"])
-                        self.PERCENTAGE_SELL += float(self.conf["increase_percenttage_by"])
+                    if self.arg_strategie["allow_increase"]:
+                        self.PERCENTAGE_BUY += float(self.arg_strategie["increase_percenttage_by"])
+                        self.PERCENTAGE_SELL += float(self.arg_strategie["increase_percenttage_by"])
             else:
                 print("an exception occured - {}".format(self.exchange.get_order_error(resp_order)))
 
