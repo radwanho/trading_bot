@@ -1,0 +1,17 @@
+{
+    "live": false,
+    "coin":"BNB",
+    "symbol":"BNBBUSD",
+    "frame" : "1m",
+    "strategie" : {
+        "name" : "multi",
+        "balance" : 7000,
+        "daily_balance" : 1000, 
+        "each_buy_price" : 100,
+        "next_buy" : 0.992, 
+        "sell_at" : 0.9,
+        "precision" : 4,
+        "increase_percenttage_by": 0.001,
+        "allow_increase": false
+    }
+}
