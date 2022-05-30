@@ -1,5 +1,6 @@
 venv/
 __pycache__/
+.ipynb_checkpoints/
 webapp/
 me_readme.txt
 *.csv
