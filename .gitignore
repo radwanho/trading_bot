@@ -10,4 +10,5 @@ demo_binance.ipynb
 demo_gate.ipynb
 gateETFbot.py
 gateSniper.py
-sketch.excalidraw
+*.excalidraw
+*.wsd
